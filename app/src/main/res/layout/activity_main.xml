@@ -12,28 +12,15 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-        </android.support.v7.widget.Toolbar>
-
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
+            android:layout_height="wrap_content"
+            android:text="Project"/>
     </android.support.design.widget.AppBarLayout>
-
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-
-
 </android.support.design.widget.CoordinatorLayout>
