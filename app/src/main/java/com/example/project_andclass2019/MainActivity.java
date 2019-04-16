@@ -97,8 +97,6 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
         iDrawerItems.add(new PrimaryDrawerItem().withName("Home").withIcon(R.drawable.ic_home_black_24dp));
         iDrawerItems.add(new PrimaryDrawerItem().withName("Notes").withIcon(R.drawable.ic_note_black_24dp));
 
-        // sticky DrawItems ; footer menu items
-
         List<IDrawerItem> stockyItems = new ArrayList<>();
 
         SwitchDrawerItem switchDrawerItem = new SwitchDrawerItem()
@@ -109,15 +107,10 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                     @Override
                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
-                            settings.edit().putInt(THEME_Key, R.style.AppTheme).apply();
+                            settings.edit().putInt(THEME_Key, R.style.AppTheme_Dark).apply();
                         } else {
                             settings.edit().putInt(THEME_Key, R.style.AppTheme).apply();
                         }
-
-                        // recreate app or the activity // if it's not working follow this steps
-                        // MainActivity.this.recreate();
-
-                        // this lines means wi want to close the app and open it again to change theme
                         TaskStackBuilder.create(MainActivity.this)
                                 .addNextIntent(new Intent(MainActivity.this, MainActivity.class))
                                 .addNextIntent(getIntent()).startActivities();
@@ -130,24 +123,24 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
         // navigation menu header
         AccountHeader header = new AccountHeaderBuilder().withActivity(this)
                 .addProfiles(new ProfileDrawerItem()
-                        .withEmail("st119967@ait.asia")
+                        .withEmail("Made by st119967@ait.asia")
                         .withName("Karan")
                         .withIcon(R.mipmap.ic_launcher_round))
                 .withSavedInstance(savedInstanceState)
                 .withHeaderBackground(R.drawable.ic_launcher_background)
-                .withSelectionListEnabledForSingleProfile(false) // we need just one profile
+                .withSelectionListEnabledForSingleProfile(false)
                 .build();
 
         // Navigation drawer
         new DrawerBuilder()
-                .withActivity(this) // activity main
-                .withToolbar(toolbar) // toolbar
-                .withSavedInstance(savedInstanceState) // saveInstance of activity
-                .withDrawerItems(iDrawerItems) // menu items
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withSavedInstance(savedInstanceState)
+                .withDrawerItems(iDrawerItems)
                 .withTranslucentNavigationBar(true)
-                .withStickyDrawerItems(stockyItems) // footer items
-                .withAccountHeader(header) // header of navigation
-                .withOnDrawerItemClickListener(this) // listener for menu items click
+                .withStickyDrawerItems(stockyItems)
+                .withAccountHeader(header)
+                .withOnDrawerItemClickListener(this)
                 .build();
 
     }
@@ -157,18 +150,13 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
         List<Note> list = dao.getNotes();// get All notes from DataBase
         this.notes.addAll(list);
         this.adapter = new NotesAdapter(this, this.notes);
-        // set listener to adapter
         this.adapter.setListener(this);
         this.recyclerView.setAdapter(adapter);
         showEmptyView();
-        // add swipe helper to recyclerView
 
         swipeToDeleteHelper.attachToRecyclerView(recyclerView);
     }
 
-    /**
-     * when no notes show msg in main_layout
-     */
     private void showEmptyView() {
         if (notes.size() == 0) {
             this.recyclerView.setVisibility(View.GONE);
@@ -179,10 +167,6 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
             findViewById(R.id.empty_notes_view).setVisibility(View.GONE);
         }
     }
-
-    /**
-     * Start EditNoteActivity.class for Create New Note
-     */
     private void onAddNewNote() {
         startActivity(new Intent(this, EditNoteActivity.class));
 
@@ -190,16 +174,12 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
