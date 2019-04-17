@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
 
         List<IDrawerItem> stockyItems = new ArrayList<>();
         SwitchDrawerItem switchDrawerItem = new SwitchDrawerItem()
-                .withName("Main theme")
+                .withName("Theme Picker")
                 .withChecked(theme == R.style.AppTheme_Dark)
                 .withIcon(R.drawable.ic_dark_theme)
                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {

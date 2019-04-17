@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1f1f1">
+    <!--tools:context="com.example.project_andclass2019.MainActivity">-->
+    <ImageView
+        android:id="@+id/splashpic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/spash" />
+
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Capital Errands"
+        android:textSize="35sp"
+        android:layout_marginTop="40dp"
+        android:textStyle="bold"/>
+
+</RelativeLayout>
