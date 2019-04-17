@@ -33,8 +33,6 @@ public abstract class MainActionModeCallback implements ActionMode.Callback {
             this.countItem.setTitle(chackedCount);
     }
 
-    /* check if shown (params b visible)
-     */
     public void changeShareItemVisible(boolean b) {
         shareItem.setVisible(b);
     }

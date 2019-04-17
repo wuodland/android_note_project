@@ -14,7 +14,7 @@ public class Note {
         private String noteText;
         @ColumnInfo(name = "date")
         private long noteDate;
-        @Ignore //no need to store inside DB
+        @Ignore
         private boolean checked = false;
         public Note() {
         }

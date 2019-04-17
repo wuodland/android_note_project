@@ -48,7 +48,7 @@ public class EditNoteActivity extends AppCompatActivity {
     private void onSaveNote() {
         String text = inputNote.getText().toString();
         if (!text.isEmpty()) {
-            long date = new Date().getTime(); // get  systime
+            long date = new Date().getTime(); // get the time of notemaking
             // check notes else make new Note
             if (temp == null) {
                 temp = new Note(text, date);
