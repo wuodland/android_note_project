@@ -4,9 +4,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.project_andclass2019.R;
-
-
-
 public abstract class MainActionModeCallback implements ActionMode.Callback {
     private ActionMode action;
     private MenuItem countItem;

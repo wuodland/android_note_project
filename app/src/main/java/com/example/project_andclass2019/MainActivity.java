@@ -21,13 +21,10 @@ import android.os.Bundle;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.project_andclass2019.adapters.NotesAdapter;
@@ -53,19 +50,17 @@ import java.util.List;
 import static com.example.project_andclass2019.EditNoteActivity.NOTE_EXTRA_Key;
 
 public class MainActivity extends AppCompatActivity implements NoteEventListener, Drawer.OnDrawerItemClickListener {
-    private static final String TAG = "MainActivity";
     private RecyclerView recyclerView;
     private ArrayList<Note> notes;
     private NotesAdapter adapter;
     private NotesDao dao;
+    private int theme;
     private MainActionModeCallback actionModeCallback;
     private int chackedCount = 0;
     private FloatingActionButton fab;
     private SharedPreferences settings;
-    public static final String THEME_Key = "app_theme";
-    public static final String APP_PREFERENCES = "notepad_settings";
-    private int theme;
-
+    public static final String THEME_Key ="app_theme";
+    public static final String APP_PREFERENCES ="notepad_settings";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         settings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -75,11 +70,9 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         setupNavigation(savedInstanceState, toolbar);
         recyclerView = findViewById(R.id.notes_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,17 +80,13 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                 onAddNewNote();
             }
         });
-
         dao = NotesDB.getInstance(this).notesDao();
     }
-
     private void setupNavigation(Bundle savedInstanceState, Toolbar toolbar) {
-
         // Navigation menu items
         List<IDrawerItem> iDrawerItems = new ArrayList<>();
         iDrawerItems.add(new PrimaryDrawerItem().withName("HomePage").withIcon(R.drawable.ic_home_black_24dp));
         iDrawerItems.add(new PrimaryDrawerItem().withName("All Notes").withIcon(R.drawable.ic_note_black_24dp));
-
         List<IDrawerItem> stockyItems = new ArrayList<>();
         SwitchDrawerItem switchDrawerItem = new SwitchDrawerItem()
                 .withName("Theme Picker")
@@ -116,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                                 .addNextIntent(getIntent()).startActivities();
                     }
                 });
-
         stockyItems.add(new PrimaryDrawerItem().withName("Settings").withIcon(R.drawable.ic_dark_theme));
         stockyItems.add(switchDrawerItem);
         AccountHeader header = new AccountHeaderBuilder().withActivity(this)
@@ -136,9 +124,7 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                 .withStickyDrawerItems(stockyItems)
                 .withAccountHeader(header)
                 .withOnDrawerItemClickListener(this)
-                .build();
-
-    }
+                .build();    }
     private void loadNotes() {
         this.notes = new ArrayList<>();
         List<Note> list = dao.getNotes();
@@ -147,20 +133,15 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
         this.adapter.setListener(this);
         this.recyclerView.setAdapter(adapter);
         showEmptyView();
-
-        swipeToDeleteHelper.attachToRecyclerView(recyclerView);
-    }
-
+        swipeToDeleteHelper.attachToRecyclerView(recyclerView); }
     private void showEmptyView() {
         if (notes.size() == 0) {
             this.recyclerView.setVisibility(View.GONE);
             findViewById(R.id.empty_notes_view).setVisibility(View.VISIBLE);
-
         } else {
             this.recyclerView.setVisibility(View.VISIBLE);
             findViewById(R.id.empty_notes_view).setVisibility(View.GONE);
-        }
-    }
+        }    }
     private void onAddNewNote() {
         startActivity(new Intent(this, EditNoteActivity.class));
     }
@@ -176,22 +157,17 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
     @Override
     protected void onResume() {
         super.onResume();
-        loadNotes();
-    }
-
+        loadNotes();    }
     @Override
     public void onNoteClick(Note note) {
         Intent edit = new Intent(this, EditNoteActivity.class);
         edit.putExtra(NOTE_EXTRA_Key, note.getId());
-        startActivity(edit);
-
-    }
+        startActivity(edit);    }
     @Override
     public void onNoteLongClick(Note note) {
         note.setChecked(true);
@@ -208,15 +184,12 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                 if (chackedCount > 1) {
                     actionModeCallback.changeShareItemVisible(false);
                 } else actionModeCallback.changeShareItemVisible(true);
-
                 if (chackedCount == 0) {
                     actionModeCallback.getAction().finish();
                 }
-
                 actionModeCallback.setCount(chackedCount + "/" + notes.size());
                 adapter.notifyDataSetChanged();
             }
-
             @Override
             public void onNoteLongClick(Note note) {
             }
@@ -235,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
         startActionMode(actionModeCallback);
         fab.setVisibility(View.GONE); //hid FloatButton
         actionModeCallback.setCount(chackedCount + "/" + notes.size());
-    } //sharing part below in Plain Text
+    } //sharing in PlainText
     private void onShareNote() {
         Note note = adapter.getCheckedNotes().get(0);
         Intent share = new Intent(Intent.ACTION_SEND);
@@ -253,23 +226,17 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
             for (Note note : chackedNotes) {
                 dao.deleteNote(note);
             }
-            // refresh Notes
             loadNotes();
             Toast.makeText(this, chackedNotes.size() + " Deleted succesfully", Toast.LENGTH_SHORT).show();
         } else Toast.makeText(this, "No Notes selected", Toast.LENGTH_SHORT).show();
-
-        //adapter.setMultiCheckMode(false);
     }
-
     @Override
     public void onActionModeFinished(ActionMode mode) {
         super.onActionModeFinished(mode);
-        adapter.setMultiCheckMode(false); // uncheck the notes
+        adapter.setMultiCheckMode(false);
         adapter.setListener(this); // set back the old listener
         fab.setVisibility(View.VISIBLE);
-    }
-
-    // swipe to right or to left te delete
+    }// swipe to right or to left te delete
     private ItemTouchHelper swipeToDeleteHelper = new ItemTouchHelper(
             new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                 @Override
@@ -296,9 +263,7 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                         dao.deleteNote(swipedNote);
                         notes.remove(swipedNote);
                         adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-                        showEmptyView();
-                    }
-                })
+                        showEmptyView(); }})
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -306,12 +271,9 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                     }
                 })
                 .setCancelable(false)
-                .create().show();
-    }
-
+                .create().show(); }
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
         Toast.makeText(this, "" + position, Toast.LENGTH_SHORT).show();
         return false;
-    }
-}
+    }}

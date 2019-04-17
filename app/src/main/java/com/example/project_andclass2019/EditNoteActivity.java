@@ -2,25 +2,20 @@ package com.example.project_andclass2019;
 import com.example.project_andclass2019.db.NotesDB;
 import com.example.project_andclass2019.db.NotesDao;
 import com.example.project_andclass2019.model.Note;
-
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import java.util.Date;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
+import java.util.Date;
 import android.support.v7.widget.Toolbar;
-
-
 public class EditNoteActivity extends AppCompatActivity {
-
     private EditText inputNote;
     private NotesDao dao;
     private Note temp;
     public static final String NOTE_EXTRA_Key = "note_id";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -37,15 +32,12 @@ public class EditNoteActivity extends AppCompatActivity {
             temp = dao.getNoteById(id);
             inputNote.setText(temp.getNoteText());
         } else inputNote.setFocusable(true);
-
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edite_note_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -53,7 +45,6 @@ public class EditNoteActivity extends AppCompatActivity {
             onSaveNote();
         return super.onOptionsItemSelected(item);
     }
-
     private void onSaveNote() {
         String text = inputNote.getText().toString();
         if (!text.isEmpty()) {
@@ -61,17 +52,13 @@ public class EditNoteActivity extends AppCompatActivity {
             // check notes else make new Note
             if (temp == null) {
                 temp = new Note(text, date);
-                dao.insertNote(temp); // create new Note and inserted to database
+                dao.insertNote(temp); //make new on DB
             } else {
                 temp.setNoteText(text);
                 temp.setNoteDate(date);
-                dao.updateNote(temp); // change text and date and update Note on database
+                dao.updateNote(temp); //update everything
             }
-
             finish();
         }
-
     }
-
-
 }
