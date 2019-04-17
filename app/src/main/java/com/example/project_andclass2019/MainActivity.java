@@ -1,4 +1,5 @@
 package com.example.project_andclass2019;
+
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -94,14 +95,13 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
 
         // Navigation menu items
         List<IDrawerItem> iDrawerItems = new ArrayList<>();
-        iDrawerItems.add(new PrimaryDrawerItem().withName("Home").withIcon(R.drawable.ic_home_black_24dp));
-        iDrawerItems.add(new PrimaryDrawerItem().withName("Notes").withIcon(R.drawable.ic_note_black_24dp));
+        iDrawerItems.add(new PrimaryDrawerItem().withName("HomePage").withIcon(R.drawable.ic_home_black_24dp));
+        iDrawerItems.add(new PrimaryDrawerItem().withName("All Notes").withIcon(R.drawable.ic_note_black_24dp));
 
         List<IDrawerItem> stockyItems = new ArrayList<>();
-
         SwitchDrawerItem switchDrawerItem = new SwitchDrawerItem()
-                .withName("Dark Theme")
-                .withChecked(theme == R.style.MaterialTheme_DayNight)
+                .withName("Main theme")
+                .withChecked(theme == R.style.AppTheme_Dark)
                 .withIcon(R.drawable.ic_dark_theme)
                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {
                     @Override
@@ -119,18 +119,13 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
 
         stockyItems.add(new PrimaryDrawerItem().withName("Settings").withIcon(R.drawable.ic_dark_theme));
         stockyItems.add(switchDrawerItem);
-
-        // navigation menu header
         AccountHeader header = new AccountHeaderBuilder().withActivity(this)
                 .addProfiles(new ProfileDrawerItem()
                         .withEmail("Made by st119967@ait.asia")
-                        .withName("Karan")
-                        .withIcon(R.mipmap.ic_launcher_round))
+                        .withName("Karan Raj Baruah").withIcon(R.mipmap.ic_launcher_round))
                 .withSavedInstance(savedInstanceState)
                 .withHeaderBackground(R.drawable.ic_launcher_background)
-                .withSelectionListEnabledForSingleProfile(false)
-                .build();
-
+                .withSelectionListEnabledForSingleProfile(false).build();
         // Navigation drawer
         new DrawerBuilder()
                 .withActivity(this)
@@ -144,10 +139,9 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                 .build();
 
     }
-
     private void loadNotes() {
         this.notes = new ArrayList<>();
-        List<Note> list = dao.getNotes();// get All notes from DataBase
+        List<Note> list = dao.getNotes();
         this.notes.addAll(list);
         this.adapter = new NotesAdapter(this, this.notes);
         this.adapter.setListener(this);
@@ -169,19 +163,15 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
     }
     private void onAddNewNote() {
         startActivity(new Intent(this, EditNoteActivity.class));
-
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -189,8 +179,6 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
 
         return super.onOptionsItemSelected(item);
     }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -204,18 +192,16 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
         startActivity(edit);
 
     }
-
     @Override
     public void onNoteLongClick(Note note) {
         note.setChecked(true);
         chackedCount = 1;
         adapter.setMultiCheckMode(true);
-
-        // set new listener to adapter intend off MainActivity listener that we have implement
-        adapter.setListener(new NoteEventListener() {
+        adapter.setListener(new NoteEventListener()
+        {
             @Override
             public void onNoteClick(Note note) {
-                note.setChecked(!note.isChecked()); // inverse selected
+                note.setChecked(!note.isChecked());
                 if (note.isChecked())
                     chackedCount++;
                 else chackedCount--;
@@ -242,28 +228,23 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                     onDeleteMultiNotes();
                 else if (menuItem.getItemId() == R.id.action_share_note)
                     onShareNote();
-
                 actionMode.finish();
                 return false;
             }
         };
-        startActionMode(actionModeCallback); //startaction
-        // hide fab button
-        fab.setVisibility(View.GONE);
+        startActionMode(actionModeCallback);
+        fab.setVisibility(View.GONE); //hid FloatButton
         actionModeCallback.setCount(chackedCount + "/" + notes.size());
-    }
-
+    } //sharing part below in Plain Text
     private void onShareNote() {
         Note note = adapter.getCheckedNotes().get(0);
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
-        String notetext = note.getNoteText() + "\n\n Create on : " +
-                NoteUtils.dateFromLong(note.getNoteDate()) + "\n  By :" +
+        String notetext = note.getNoteText() + "\n\n Made on-" +
+                NoteUtils.dateFromLong(note.getNoteDate()) + "\n  Made By :" +
                 getString(R.string.app_name);
         share.putExtra(Intent.EXTRA_TEXT, notetext);
         startActivity(share);
-
-
     }
 
     private void onDeleteMultiNotes() {
@@ -274,8 +255,8 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
             }
             // refresh Notes
             loadNotes();
-            Toast.makeText(this, chackedNotes.size() + " Note(s) Delete successfully !", Toast.LENGTH_SHORT).show();
-        } else Toast.makeText(this, "No Note(s) selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, chackedNotes.size() + " Deleted succesfully", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(this, "No Notes selected", Toast.LENGTH_SHORT).show();
 
         //adapter.setMultiCheckMode(false);
     }
@@ -283,7 +264,6 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
     @Override
     public void onActionModeFinished(ActionMode mode) {
         super.onActionModeFinished(mode);
-
         adapter.setMultiCheckMode(false); // uncheck the notes
         adapter.setListener(this); // set back the old listener
         fab.setVisibility(View.VISIBLE);
@@ -296,7 +276,6 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                 public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                     return false;
                 }
-
                 @Override
                 public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                     if (notes != null) {
@@ -304,42 +283,34 @@ public class MainActivity extends AppCompatActivity implements NoteEventListener
                         Note swipedNote = notes.get(viewHolder.getAdapterPosition());
                         if (swipedNote != null) {
                             swipeToDelete(swipedNote, viewHolder);
-
                         }
-
                     }
                 }
             });
-
     private void swipeToDelete(final Note swipedNote, final RecyclerView.ViewHolder viewHolder) {
         new AlertDialog.Builder(MainActivity.this)
-                .setMessage("Delete Note?")
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                .setMessage("Sure to delete?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dao.deleteNote(swipedNote);
                         notes.remove(swipedNote);
                         adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                         showEmptyView();
-
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         recyclerView.getAdapter().notifyItemChanged(viewHolder.getAdapterPosition());
-
-
                     }
                 })
                 .setCancelable(false)
                 .create().show();
-
     }
 
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-
         Toast.makeText(this, "" + position, Toast.LENGTH_SHORT).show();
         return false;
     }

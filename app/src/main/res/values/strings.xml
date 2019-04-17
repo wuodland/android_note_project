@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Android Project</string>
-    <string name="action_settings">Setting</string>
-    <string name="share_note">Share Note</string>
+    <string name="share_note">Share the Note</string>
     <string name="delete_notes">Delete Notes</string>
-    <string name="no_notes">No Note</string>
 </resources>
